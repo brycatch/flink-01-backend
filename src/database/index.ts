@@ -24,6 +24,16 @@ const connect = (app: express.Application) => {
     });
 };
 
+const onlyConnect = () => {
+  mongoose.connect(config.mongo.url, mongoOptions)
+    .then(() => {
+      console.log('Base de datos online');
+    })
+    .catch((err) => {
+      console.log('No hay conexión con la base de datos');
+    });
+};
+
 const disconnect = () => {
   mongoose.disconnect()
     .then((result) => {
@@ -39,4 +49,4 @@ const setSanitizer = (app: express.Application) => {
   app.use(sanitize({ replaceWith: '_' }))
 }
 
-export default { connect, disconnect }
+export default { connect, disconnect, onlyConnect }

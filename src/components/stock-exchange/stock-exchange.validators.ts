@@ -2,6 +2,8 @@ import store from './stock-exchange.store';
 import { compareAsc, set } from "date-fns";
 import { IMarketValue } from './stock-exchange.interface';
 
+const SYMBOL_REGEX = /^[A-Za-z\$\.]{1,6}$/;
+
 const symbol = {
   unique: async (symbol: string, errors: string[]) => {
     const stockExchange = await store.get({ symbol });
@@ -10,8 +12,12 @@ const symbol = {
   },
   update: async (symbol: string, errors: string[]) => {
     const stockExchange = await store.get({ symbol });
-    const isInvalid = stockExchange === null;
+    const isInvalid = stockExchange !== null;
     validateError("Symbol - update", isInvalid, errors);
+  },
+  regex: async (symbol: string, errors: string[]) => {
+    const isInvalid = !(new RegExp(SYMBOL_REGEX).test(symbol));
+    validateError("Symbol - Regex", isInvalid, errors);
   },
 }
 

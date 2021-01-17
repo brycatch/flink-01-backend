@@ -1,6 +1,6 @@
 import Model from './stock-exchange.model';
 import genericValidators from '../../utils/generic-validators.utils';
-import customValidators from './stock-exchanges.validators';
+import customValidators from './stock-exchange.validators';
 import { v4 as uuidv4 } from "uuid";
 import { IMarketValue, IStockExchange, TStockExchangeSearch } from './stock-exchange.interface';
 
@@ -96,8 +96,10 @@ const isValid = async (iStockExchange: IStockExchange): Promise<boolean> => {
   const errors: string[] = [];
   genericValidators.form.textField("Name", iStockExchange.name, errors);
   genericValidators.form.textArea("Description", iStockExchange.description, errors);
-  genericValidators.form.textField("Symbol", iStockExchange.name, errors);
+  genericValidators.form.textField("Symbol", iStockExchange.symbol, errors);
+  customValidators.marketValue.hasLength(iStockExchange.market_values, errors);
   customValidators.marketValue.elements(iStockExchange.market_values, errors);
+  customValidators.symbol.regex(iStockExchange.symbol, errors);
   await customValidators.symbol.unique(iStockExchange.symbol, errors);
   return errors.length === 0;
 };
@@ -116,16 +118,17 @@ const isPartialValid = async (iStockExchange: Partial<IStockExchange>) => {
           genericValidators.form.textArea("Description", iStockExchange.description as string, errors);
           break;
         case "symbol":
-          genericValidators.form.textField("Symbol", iStockExchange.name as string, errors);
+          genericValidators.form.textField("Symbol", iStockExchange.symbol as string, errors);
+          customValidators.symbol.regex(iStockExchange.symbol as string, errors);
           await customValidators.symbol.update(iStockExchange.symbol as string, errors);
           break;
         case "market_values":
           customValidators.marketValue.elements(iStockExchange.market_values as IMarketValue[], errors);
+          customValidators.marketValue.hasLength(iStockExchange.market_values as IMarketValue[], errors);
           break;
       }
     })
   );
-
   return errors.length === 0;
 };
 
@@ -181,21 +184,20 @@ const getFilters = (query: any) => {
     keys.forEach(key => {
       switch (key) {
         case "name":
-          // TODO:Implementar búsqueda like
-          filters.names.push({ name: query[key] });
+          query[key].forEach((name: string) => {
+            filters.names.push({ name: { $regex: new RegExp(name, "i") } });
+          });
           break;
         case "symbol":
           query[key].forEach((symbol: string) => {
-            filters.symbols.push({ symbol });
+            filters.symbols.push({ symbol: { $regex: new RegExp(symbol, "i") } });
           });
           break;
       }
     });
-  } else {
-    filters.names = [{}];
-    filters.symbols = [{}];
   }
-
+  filters.names = filters.names.length === 0 ? [{}] : filters.names;
+  filters.symbols = filters.symbols.length === 0 ? [{}] : filters.symbols;
   return filters;
 };
 export default { create, get, list, patch, remove };

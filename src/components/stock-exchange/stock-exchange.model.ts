@@ -3,9 +3,7 @@ import unique from "mongoose-unique-validator";
 
 const schema = new mongoose.Schema({
   _id: {
-    type: String,
-    required: [true, "ID required"],
-    unique: true
+    type: String
   },
   name: {
     type: String,
