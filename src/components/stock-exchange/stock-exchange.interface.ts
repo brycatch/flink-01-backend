@@ -1,3 +1,5 @@
+export type TStockExchangeSearch = { _id: string } | { symbol: string };
+
 export interface IMarketValue {
   value: number;
   date: Date,
