@@ -15,7 +15,6 @@ router.delete("/:id", remove());
 function list() {
   return (req: Request, res: Response, next: NextFunction) => {
     const query = req.query;
-    console.log(query);
     controller
       .list(query)
       .then(({ data, code, status }) => {

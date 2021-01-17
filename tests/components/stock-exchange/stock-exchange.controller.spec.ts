@@ -19,6 +19,7 @@ describe("Stock exchange - controller", () => {
   describe("Create", () => {
     it("Should be create a stock exchange / item 1", async () => {
       const mock = mockStockExchange();
+      mock.symbol = "$CAA";
       const { data, code, status } = await controller.create(mock);
       expect(data.stock_exchange).not.toBeNull();
       expect(code).toBe(201);
@@ -30,7 +31,7 @@ describe("Stock exchange - controller", () => {
     });
     it("Should be create a stock exchange / item 2", async () => {
       const mock = mockStockExchange();
-      mock.symbol = "$BBB";
+      mock.symbol = "$CBBB";
       mock.name = "test-02"
       const { data, code, status } = await controller.create(mock);
       expect(data.stock_exchange).not.toBeNull();
@@ -43,6 +44,7 @@ describe("Stock exchange - controller", () => {
     });
     it("Should be return 400 / symbol already inserted", async () => {
       const mock = mockStockExchange();
+      mock.symbol = "$CAA";
       const { data, code, status } = await controller.create(mock);
       expect(data.message).not.toBeNull();
       expect(code).toBe(400);
@@ -176,19 +178,21 @@ describe("Stock exchange - controller", () => {
       expect(code).toBe(200);
       expect(status).toBe("success");
     });
-    it("Should be return 400 / symbol already inserted", async () => {
-      const mock = partialMockStockExchange1();
-      const { data, code, status } = await controller.patch(stockId2, mock);
-      expect(data.message).not.toBeNull();
-      expect(code).toBe(400);
-      expect(status).toBe("error");
-    });
     it("Should be update a stock exchange / symbol", async () => {
       const mock = partialMockStockExchange2();
+      mock.symbol = "$CCCC";
       const { data, code, status } = await controller.patch(stockId1, mock);
       expect(data.updated).toBe(true);
       expect(code).toBe(200);
       expect(status).toBe("success");
+    });
+    it("Should be return 400 / symbol already inserted", async () => {
+      const mock = partialMockStockExchange2();
+      mock.symbol = "$CCCC";
+      const { data, code, status } = await controller.patch(stockId2, mock);
+      expect(data.message).not.toBeNull();
+      expect(code).toBe(400);
+      expect(status).toBe("error");
     });
     it("Should be return 400 / market value without items", async () => {
       const mock = badMockStockExchange3();

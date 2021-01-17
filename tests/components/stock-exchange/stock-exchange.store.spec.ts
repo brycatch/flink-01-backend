@@ -19,6 +19,7 @@ describe("Stock exchange - store", () => {
   describe("Create", () => {
     it("Should be create a stock exchange / example 1", async () => {
       const mock = mockStockExchange();
+      mock.symbol = "$SAA"
       const result = await store.create(mock);
       expect(result).not.toBeNull();
       if (result) {
@@ -28,7 +29,7 @@ describe("Stock exchange - store", () => {
     });
     it("Should be create a stock exchange / example 2", async () => {
       const mock = mockStockExchange();
-      mock.symbol = "$BBB";
+      mock.symbol = "$SBBB";
       mock.name = "test-02"
       const result = await store.create(mock);
       expect(result).not.toBeNull();
@@ -39,6 +40,7 @@ describe("Stock exchange - store", () => {
     });
     it("Should be return null / symbol already inserted", async () => {
       const mock = mockStockExchange();
+      mock.symbol = "$SAA"
       const result = await store.create(mock);
       expect(result).toBeNull();
     });
@@ -134,11 +136,13 @@ describe("Stock exchange - store", () => {
     });
     it("Should be update a stock exchange / symbol", async () => {
       const mock = partialMockStockExchange2();
+      mock.symbol = "$SCCC";
       const result = await store.patch(stockId1, mock);
       expect(result).toBe(true);
     });
     it("Should be return false / symbol already inserted", async () => {
       const mock = partialMockStockExchange2();
+      mock.symbol = "$SCCC";
       const result = await store.patch(stockId2, mock);
       expect(result).toBe(false);
     });
