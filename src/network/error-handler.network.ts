@@ -2,6 +2,7 @@ import response from './response.network';
 import express from 'express';
 
 const errorHandler = (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.log({ err });
   const errCode = err.message || err;
 
   const regex = new RegExp(/\[(.*)\]\s\[(.*)\]/);

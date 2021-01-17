@@ -62,10 +62,10 @@ const remove = (_id: string): Promise<IPromiseResult> => {
       const removed = await store.remove(_id);
       const result: IPromiseResult = removed
         ? { data: { removed }, code: 200, status: "success" }
-        : { data: { message: "Stock inválido" }, code: 400, status: "error" };
+        : { data: { message: "Stock no encontrado" }, code: 404, status: "error" };
       resolve(result);
     } catch (error) {
-      reject("[400] [Stock inválido]")
+      reject("[404] [Stock no encontrado]")
     }
   });
 };

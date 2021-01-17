@@ -37,11 +37,16 @@ const marketValue = {
     validateError(`MarketValue - ${index} - value`, isInvalid, errors);
   },
   date: (marketValue: IMarketValue, index: number, errors: string[]) => {
-    const resetTime = { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
-    const today = set(new Date(), resetTime);
-    const marketDate = set(marketValue.date, resetTime);
-    const isInvalid = compareAsc(marketDate, today) === -1;
-    validateError(`MarketValue - ${index} - value`, isInvalid, errors);
+    try {
+      const resetTime = { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 };
+      const today = set(new Date(), resetTime);
+      const marketValueDate = new Date(marketValue.date);
+      const marketDate = set(marketValueDate, resetTime);
+      const isInvalid = compareAsc(marketDate, today) === -1;
+      validateError(`MarketValue - ${index} - date`, isInvalid, errors);
+    } catch (error) {
+      validateError(`MarketValue - ${index} - date`, true, errors);
+    }
   },
 };
 

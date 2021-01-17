@@ -176,19 +176,19 @@ describe("Stock exchange - controller", () => {
       expect(code).toBe(200);
       expect(status).toBe("success");
     });
+    it("Should be return 400 / symbol already inserted", async () => {
+      const mock = partialMockStockExchange1();
+      const { data, code, status } = await controller.patch(stockId2, mock);
+      expect(data.message).not.toBeNull();
+      expect(code).toBe(400);
+      expect(status).toBe("error");
+    });
     it("Should be update a stock exchange / symbol", async () => {
       const mock = partialMockStockExchange2();
       const { data, code, status } = await controller.patch(stockId1, mock);
       expect(data.updated).toBe(true);
       expect(code).toBe(200);
       expect(status).toBe("success");
-    });
-    it("Should be return 400 / symbol already inserted", async () => {
-      const mock = partialMockStockExchange2();
-      const { data, code, status } = await controller.patch(stockId2, mock);
-      expect(data.message).not.toBeNull();
-      expect(code).toBe(400);
-      expect(status).toBe("error");
     });
     it("Should be return 400 / market value without items", async () => {
       const mock = badMockStockExchange3();
@@ -233,16 +233,16 @@ describe("Stock exchange - controller", () => {
       expect(code).toBe(200);
       expect(status).toBe("success");
     });
-    it("Should be return 400 - element already removed", async () => {
+    it("Should be return 404 - element already removed", async () => {
       const { data, code, status } = await controller.remove(stockId1);
       expect(data.message).not.toBeNull();
-      expect(code).toBe(400);
+      expect(code).toBe(404);
       expect(status).toBe("error");
     });
-    it("Should be return 400 - invalid id", async () => {
+    it("Should be return 404 - invalid id", async () => {
       const { data, code, status } = await controller.remove("");
       expect(data.message).not.toBeNull();
-      expect(code).toBe(400);
+      expect(code).toBe(404);
       expect(status).toBe("error");
     });
   });
