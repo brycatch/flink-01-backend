@@ -164,22 +164,22 @@ describe("Stock exchange - store", () => {
     });
   });
 
-  // describe("Remove", () => {
-  //   it("Should be remove a stock exchange - item 1", async () => {
-  //     const removed = await store.remove(stockId1);
-  //     expect(removed).toBe(true);
-  //   });
-  //   it("Should be remove a stock exchange - item 2", async () => {
-  //     const removed = await store.remove(stockId2);
-  //     expect(removed).toBe(true);
-  //   });
-  //   it("Should return an error - element already removed", async () => {
-  //     const removed = await store.remove(stockId1);
-  //     expect(removed).toBe(false);
-  //   });
-  //   it("Should return an error - invalid id", async () => {
-  //     const removed = await store.remove("");
-  //     expect(removed).toBe(false);
-  //   });
-  // });
+  describe("Remove", () => {
+    it("Should be remove a stock exchange - item 1", async () => {
+      const removed = await store.remove(stockId1);
+      expect(removed).toBe(true);
+    });
+    it("Should be remove a stock exchange - item 2", async () => {
+      const removed = await store.remove(stockId2);
+      expect(removed).toBe(true);
+    });
+    it("Should return an error - element already removed", async () => {
+      const removed = await store.remove(stockId1);
+      expect(removed).toBe(false);
+    });
+    it("Should return an error - invalid id", async () => {
+      const removed = await store.remove("");
+      expect(removed).toBe(false);
+    });
+  });
 });
