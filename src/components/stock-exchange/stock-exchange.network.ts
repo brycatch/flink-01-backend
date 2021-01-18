@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/list", list());
 router.get("/symbol/:symbol", get(false));
+router.get("/symbol/:symbol/exist", exist());
 router.get("/:id", get(true));
 router.post("/", create());
 router.patch("/:id", patch());
@@ -32,6 +33,19 @@ function get(byId: boolean) {
 
     controller
       .get(search)
+      .then(({ data, code, status }) => {
+        response.create(res, data, code, status);
+      })
+      .catch(next);
+  }
+};
+
+
+function exist() {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const search: TStockExchangeSearch = { symbol: req.params.symbol }
+    controller
+      .exist(search)
       .then(({ data, code, status }) => {
         response.create(res, data, code, status);
       })
